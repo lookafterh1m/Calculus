@@ -1,11 +1,13 @@
-\documentclass[11pt, russian]{article}
-    \usepackage{babel}
+\documentclass[rus, 12 pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T2A]{fontenc}
+\usepackage[russian]{babel}
+
     \usepackage[breakable]{tcolorbox}
     \usepackage{parskip} % Stop auto-indenting (to mimic markdown behaviour)
     
     \usepackage{iftex}
     \ifPDFTeX
-    	\usepackage[T1]{fontenc}
     	\usepackage{mathpazo}
     \else
     	\usepackage{fontspec}
@@ -18,7 +20,7 @@
     \let\Oldincludegraphics\includegraphics
     % Ensure that by default, figures have no caption (until we provide a
     % proper Figure object with a Caption API and a way to capture that
-    % in the conversion process.
+    % in the conversion process - todo).
     \usepackage{caption}
     \DeclareCaptionFormat{nocaption}{}
     \captionsetup{format=nocaption,aboveskip=0pt,belowskip=0pt}
@@ -155,7 +157,7 @@
     \renewcommand{\LaTeX}{\textrm{\Oldlatex}}
     % Document parameters
     % Document title
-    \title{Интерполирование сплайнами}
+    \title{calculus5}
     
     
     
@@ -373,14 +375,9 @@
     
 
 \begin{document}
-    
-    \maketitle
-    
-    
 
-    
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
-\prompt{In}{incolor}{38}{\boxspacing}
+\prompt{In}{incolor}{16}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
 \PY{k+kn}{from} \PY{n+nn}{math} \PY{k+kn}{import} \PY{n}{cos}\PY{p}{,} \PY{n}{pi}
 \PY{k+kn}{from} \PY{n+nn}{IPython}\PY{n+nn}{.}\PY{n+nn}{display} \PY{k+kn}{import} \PY{n}{display}\PY{p}{,} \PY{n}{Latex}\PY{p}{,} \PY{n}{Markdown}
@@ -399,8 +396,8 @@
 \end{tcolorbox}
 
     \hypertarget{ux438ux43dux442ux435ux440ux43fux43eux43bux438ux440ux43eux432ux430ux43dux438ux435-ux441ux43fux43bux430ux439ux43dux430ux43cux438}{%
-\section*{Задание:}
-\label{ux438ux43dux442ux435ux440ux43fux43eux43bux438ux440ux43eux432ux430ux43dux438ux435-ux441ux43fux43bux430ux439ux43dux430ux43cux438}}
+\section{Интерполирование
+сплайнами}\label{ux438ux43dux442ux435ux440ux43fux43eux43bux438ux440ux43eux432ux430ux43dux438ux435-ux441ux43fux43bux430ux439ux43dux430ux43cux438}}
 
 Пусть \(f(x)=\dfrac{1}{1+x^2},\:x\in\left[-1;1\right]\). Вычислить
 значения функции для
@@ -414,13 +411,13 @@
 \(S_{32}(f,x)\) с узлами \(x_k=-1+kh,\:k=0,\ldots,n\).
 
 \hypertarget{ux438ux43dux442ux435ux440ux43fux43eux43bux44fux446ux438ux43eux43dux43dux44bux439-ux43fux43eux43bux438ux43dux43eux43c-ux43bux430ux433ux440ux430ux43dux436ux430}{%
-\subsection*{1.Интерполяционный полином
+\subsection{1.Интерполяционный полином
 Лагранжа}\label{ux438ux43dux442ux435ux440ux43fux43eux43bux44fux446ux438ux43eux43dux43dux44bux439-ux43fux43eux43bux438ux43dux43eux43c-ux43bux430ux433ux440ux430ux43dux436ux430}}
 
 Схема Эйткена с узлами \(x_k=-1+kh,\:k=0,\ldots,n\).
 
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
-\prompt{In}{incolor}{39}{\boxspacing}
+\prompt{In}{incolor}{17}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
 \PY{n}{N} \PY{o}{=} \PY{p}{(}\PY{l+m+mi}{4}\PY{p}{,} \PY{l+m+mi}{10}\PY{p}{,} \PY{l+m+mi}{20}\PY{p}{,} \PY{l+m+mi}{40}\PY{p}{)}
 \PY{n}{Arguments} \PY{o}{=} \PY{p}{(}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1} \PY{o}{+} \PY{l+m+mi}{1} \PY{o}{/} \PY{n}{n}\PY{p}{,} \PY{o}{\PYZhy{}} \PY{l+m+mi}{1} \PY{o}{/} \PY{n}{n}\PY{p}{,} \PY{l+m+mi}{1} \PY{o}{/} \PY{n}{n}\PY{p}{,} \PY{l+m+mi}{1} \PY{o}{\PYZhy{}} \PY{l+m+mi}{1} \PY{o}{/} \PY{n}{n}\PY{p}{)} \PY{k}{for} \PY{n}{n} \PY{o+ow}{in} \PY{n}{N}\PY{p}{)}
@@ -435,8 +432,10 @@
             \PY{k}{if} \PY{n}{i} \PY{o}{==} \PY{l+m+mi}{1}\PY{p}{:}
                 \PY{n}{coeffs}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{nodes\PYZus{}f}\PY{p}{)}
                 \PY{k}{break}
-            \PY{n}{pol} \PY{o}{=} \PY{n+nb}{pow}\PY{p}{(}\PY{n}{nodes\PYZus{}x}\PY{p}{[}\PY{n}{j} \PY{o}{+} \PY{n}{i} \PY{o}{\PYZhy{}} \PY{l+m+mi}{1}\PY{p}{]} \PY{o}{\PYZhy{}} \PY{n}{nodes\PYZus{}x}\PY{p}{[}\PY{n}{j}\PY{p}{]}\PY{p}{,} \PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{)} \PY{o}{*} \PY{p}{(}\PY{n}{coeffs}\PY{p}{[}\PY{n}{i} \PY{o}{\PYZhy{}} \PY{l+m+mi}{2}\PY{p}{]}\PY{p}{[}\PY{n}{j}\PY{p}{]} \PY{o}{*} \PY{p}{(}\PY{n}{nodes\PYZus{}x}\PY{p}{[}\PY{n}{j} \PY{o}{+} \PY{n}{i} \PY{o}{\PYZhy{}} \PY{l+m+mi}{1}\PY{p}{]} \PY{o}{\PYZhy{}} \PY{n}{x}\PY{p}{)}
-                                                              \PY{o}{\PYZhy{}} \PY{n}{coeffs}\PY{p}{[}\PY{n}{i} \PY{o}{\PYZhy{}} \PY{l+m+mi}{2}\PY{p}{]}\PY{p}{[}\PY{n}{j} \PY{o}{+} \PY{l+m+mi}{1}\PY{p}{]} \PY{o}{*} \PY{p}{(}\PY{n}{nodes\PYZus{}x}\PY{p}{[}\PY{n}{j}\PY{p}{]} \PY{o}{\PYZhy{}} \PY{n}{x}\PY{p}{)}\PY{p}{)}
+            \PY{n}{pol} \PY{o}{=} \PY{n+nb}{pow}\PY{p}{(}\PY{n}{nodes\PYZus{}x}\PY{p}{[}\PY{n}{j} \PY{o}{+} \PY{n}{i} \PY{o}{\PYZhy{}} \PY{l+m+mi}{1}\PY{p}{]} \PY{o}{\PYZhy{}} \PY{n}{nodes\PYZus{}x}\PY{p}{[}\PY{n}{j}\PY{p}{]}\PY{p}{,} \PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{)} \PYZbs{}
+                  \PY{o}{*} \PY{p}{(}\PY{n}{coeffs}\PY{p}{[}\PY{n}{i} \PY{o}{\PYZhy{}} \PY{l+m+mi}{2}\PY{p}{]}\PY{p}{[}\PY{n}{j}\PY{p}{]}
+            \PY{o}{*} \PY{p}{(}\PY{n}{nodes\PYZus{}x}\PY{p}{[}\PY{n}{j} \PY{o}{+} \PY{n}{i} \PY{o}{\PYZhy{}} \PY{l+m+mi}{1}\PY{p}{]} \PY{o}{\PYZhy{}} \PY{n}{x}\PY{p}{)} \PY{o}{\PYZhy{}} \PY{n}{coeffs}\PY{p}{[}\PY{n}{i} \PY{o}{\PYZhy{}} \PY{l+m+mi}{2}\PY{p}{]}\PY{p}{[}\PY{n}{j} \PY{o}{+} \PY{l+m+mi}{1}\PY{p}{]}
+                     \PY{o}{*} \PY{p}{(}\PY{n}{nodes\PYZus{}x}\PY{p}{[}\PY{n}{j}\PY{p}{]} \PY{o}{\PYZhy{}} \PY{n}{x}\PY{p}{)}\PY{p}{)}
             \PY{n}{coeffs\PYZus{}n}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n+nb}{round}\PY{p}{(}\PY{n}{pol}\PY{p}{,} \PY{l+m+mi}{3}\PY{p}{)}\PY{p}{)}
             \PY{n}{coeffs}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{coeffs\PYZus{}n}\PY{p}{)}
     \PY{k}{return} \PY{n}{coeffs}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
@@ -447,7 +446,8 @@
     \PY{n}{answers} \PY{o}{=} \PY{p}{[}\PY{p}{]}
     \PY{n}{display}\PY{p}{(}\PY{n}{Latex}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Случай, когда \PYZdl{}n=}\PY{l+s+si}{\PYZpc{}i}\PY{l+s+s2}{\PYZdl{}:}\PY{l+s+s2}{\PYZdq{}}\PY{o}{\PYZpc{}}\PY{k}{n}), Markdown(\PYZdq{}\PYZlt{}br\PYZgt{}\PYZdq{}))
     \PY{k}{for} \PY{n}{x} \PY{o+ow}{in} \PY{n}{X}\PY{p}{:}
-        \PY{n}{display}\PY{p}{(}\PY{n}{Latex}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZdl{}L\PYZus{}}\PY{l+s+s2}{\PYZob{}}\PY{l+s+si}{\PYZpc{}i}\PY{l+s+s2}{\PYZcb{}(}\PY{l+s+si}{\PYZpc{}.3f}\PY{l+s+s2}{)=}\PY{l+s+si}{\PYZpc{}.3f}\PY{l+s+s2}{\PYZdl{};}\PY{l+s+s2}{\PYZdq{}}\PY{o}{\PYZpc{}}\PY{p}{(}\PY{n}{n}\PY{p}{,} \PY{n}{x}\PY{p}{,} \PY{n}{Aitken}\PY{p}{(}\PY{n}{x}\PY{p}{,} \PY{n}{x\PYZus{}nodes}\PY{p}{,} \PY{n}{f\PYZus{}nodes}\PY{p}{)}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+        \PY{n}{display}\PY{p}{(}\PY{n}{Latex}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZdl{}L\PYZus{}}\PY{l+s+s2}{\PYZob{}}\PY{l+s+si}{\PYZpc{}i}\PY{l+s+s2}{\PYZcb{}(}\PY{l+s+si}{\PYZpc{}.3f}\PY{l+s+s2}{)=}\PY{l+s+si}{\PYZpc{}.3f}\PY{l+s+s2}{\PYZdl{};}\PY{l+s+s2}{\PYZdq{}}
+                      \PY{o}{\PYZpc{}}\PY{p}{(}\PY{n}{n}\PY{p}{,} \PY{n}{x}\PY{p}{,} \PY{n}{Aitken}\PY{p}{(}\PY{n}{x}\PY{p}{,} \PY{n}{x\PYZus{}nodes}\PY{p}{,} \PY{n}{f\PYZus{}nodes}\PY{p}{)}\PY{p}{)}\PY{p}{)}\PY{p}{)}
     \PY{n}{display}\PY{p}{(}\PY{n}{Markdown}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZlt{}br\PYZgt{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{p}{)}
 \end{Verbatim}
 \end{tcolorbox}
@@ -537,14 +537,14 @@
 
     
     \hypertarget{ux438ux43dux442ux435ux440ux43fux43eux43bux44fux446ux438ux43eux43dux43dux44bux439-ux43fux43eux43bux438ux43dux43eux43c-ux43bux430ux433ux440ux430ux43dux436ux430-ux441-ux443ux437ux43bux430ux43cux438-ux447ux435ux431ux44bux448ux451ux432ux430}{%
-\subsection*{2.Интерполяционный полином Лагранжа с узлами
+\subsection{2.Интерполяционный полином Лагранжа с узлами
 Чебышёва}\label{ux438ux43dux442ux435ux440ux43fux43eux43bux44fux446ux438ux43eux43dux43dux44bux439-ux43fux43eux43bux438ux43dux43eux43c-ux43bux430ux433ux440ux430ux43dux436ux430-ux441-ux443ux437ux43bux430ux43cux438-ux447ux435ux431ux44bux448ux451ux432ux430}}
 
 Схема Эйткена с узлами
 \(x_k=\cos\dfrac{2k+1}{2(n+1)}\pi,\:k=0,\ldots,n.\)
 
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
-\prompt{In}{incolor}{40}{\boxspacing}
+\prompt{In}{incolor}{18}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
 \PY{n}{N} \PY{o}{=} \PY{p}{(}\PY{l+m+mi}{4}\PY{p}{,} \PY{l+m+mi}{10}\PY{p}{,} \PY{l+m+mi}{20}\PY{p}{,} \PY{l+m+mi}{40}\PY{p}{)}
 \PY{n}{Arguments} \PY{o}{=} \PY{p}{(}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1} \PY{o}{+} \PY{l+m+mi}{1} \PY{o}{/} \PY{n}{n}\PY{p}{,} \PY{o}{\PYZhy{}} \PY{l+m+mi}{1} \PY{o}{/} \PY{n}{n}\PY{p}{,} \PY{l+m+mi}{1} \PY{o}{/} \PY{n}{n}\PY{p}{,} \PY{l+m+mi}{1} \PY{o}{\PYZhy{}} \PY{l+m+mi}{1} \PY{o}{/} \PY{n}{n}\PY{p}{)} \PY{k}{for} \PY{n}{n} \PY{o+ow}{in} \PY{n}{N}\PY{p}{)}
@@ -563,7 +563,8 @@
     \PY{n}{answers} \PY{o}{=} \PY{p}{[}\PY{p}{]}
     \PY{n}{display}\PY{p}{(}\PY{n}{Latex}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Случай, когда \PYZdl{}n=}\PY{l+s+si}{\PYZpc{}i}\PY{l+s+s2}{\PYZdl{}:}\PY{l+s+s2}{\PYZdq{}}\PY{o}{\PYZpc{}}\PY{k}{n}), Markdown(\PYZdq{}\PYZlt{}br\PYZgt{}\PYZdq{}))
     \PY{k}{for} \PY{n}{x} \PY{o+ow}{in} \PY{n}{X}\PY{p}{:}
-        \PY{n}{display}\PY{p}{(}\PY{n}{Latex}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZdl{}L\PYZus{}}\PY{l+s+s2}{\PYZob{}}\PY{l+s+si}{\PYZpc{}i}\PY{l+s+s2}{\PYZcb{}(}\PY{l+s+si}{\PYZpc{}.3f}\PY{l+s+s2}{)=}\PY{l+s+si}{\PYZpc{}.3f}\PY{l+s+s2}{\PYZdl{};}\PY{l+s+s2}{\PYZdq{}}\PY{o}{\PYZpc{}}\PY{p}{(}\PY{n}{n}\PY{p}{,} \PY{n}{x}\PY{p}{,} \PY{n}{Aitken}\PY{p}{(}\PY{n}{x}\PY{p}{,} \PY{n}{x\PYZus{}nodes}\PY{p}{,} \PY{n}{f\PYZus{}nodes}\PY{p}{)}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+        \PY{n}{display}\PY{p}{(}\PY{n}{Latex}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZdl{}L\PYZus{}}\PY{l+s+s2}{\PYZob{}}\PY{l+s+si}{\PYZpc{}i}\PY{l+s+s2}{\PYZcb{}(}\PY{l+s+si}{\PYZpc{}.3f}\PY{l+s+s2}{)=}\PY{l+s+si}{\PYZpc{}.3f}\PY{l+s+s2}{\PYZdl{};}\PY{l+s+s2}{\PYZdq{}}
+                      \PY{o}{\PYZpc{}}\PY{p}{(}\PY{n}{n}\PY{p}{,} \PY{n}{x}\PY{p}{,} \PY{n}{Aitken}\PY{p}{(}\PY{n}{x}\PY{p}{,} \PY{n}{x\PYZus{}nodes}\PY{p}{,} \PY{n}{f\PYZus{}nodes}\PY{p}{)}\PY{p}{)}\PY{p}{)}\PY{p}{)}
     \PY{n}{display}\PY{p}{(}\PY{n}{Markdown}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZlt{}br\PYZgt{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{p}{)}
 \end{Verbatim}
 \end{tcolorbox}
@@ -653,11 +654,11 @@
 
     
     \hypertarget{ux441ux43fux43bux430ux439ux43d-s_11fx}{%
-\subsection*{\texorpdfstring{3.Сплайн
+\subsection{\texorpdfstring{3.Сплайн
 \(S_{11}(f,x)\)}{3.Сплайн S\_\{11\}(f,x)}}\label{ux441ux43fux43bux430ux439ux43d-s_11fx}}
 
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
-\prompt{In}{incolor}{41}{\boxspacing}
+\prompt{In}{incolor}{19}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
 \PY{k}{def} \PY{n+nf}{spline11}\PY{p}{(}\PY{n}{x}\PY{p}{:} \PY{n+nb}{float}\PY{p}{,} \PY{n}{nodes\PYZus{}x}\PY{p}{:} \PY{n+nb}{list}\PY{p}{,} \PY{n}{nodes\PYZus{}f}\PY{p}{:} \PY{n+nb}{list}\PY{p}{)}\PY{p}{:}
     \PY{n}{l} \PY{o}{=} \PY{l+m+mi}{0}
@@ -677,7 +678,8 @@
     \PY{n}{answers} \PY{o}{=} \PY{p}{[}\PY{p}{]}
     \PY{n}{display}\PY{p}{(}\PY{n}{Latex}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Случай, когда \PYZdl{}n=}\PY{l+s+si}{\PYZpc{}i}\PY{l+s+s2}{\PYZdl{}:}\PY{l+s+s2}{\PYZdq{}}\PY{o}{\PYZpc{}}\PY{k}{n}), Markdown(\PYZdq{}\PYZlt{}br\PYZgt{}\PYZdq{}))
     \PY{k}{for} \PY{n}{x} \PY{o+ow}{in} \PY{n}{X}\PY{p}{:}
-        \PY{n}{display}\PY{p}{(}\PY{n}{Latex}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZdl{}S\PYZus{}}\PY{l+s+si}{\PYZob{}11\PYZcb{}}\PY{l+s+s2}{(f,}\PY{l+s+si}{\PYZpc{}.3f}\PY{l+s+s2}{)=}\PY{l+s+si}{\PYZpc{}.3f}\PY{l+s+s2}{\PYZdl{};}\PY{l+s+s2}{\PYZdq{}}\PY{o}{\PYZpc{}}\PY{p}{(}\PY{n}{x}\PY{p}{,} \PY{n}{spline11}\PY{p}{(}\PY{n}{x}\PY{p}{,} \PY{n}{x\PYZus{}nodes}\PY{p}{,} \PY{n}{f\PYZus{}nodes}\PY{p}{)}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+        \PY{n}{display}\PY{p}{(}\PY{n}{Latex}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZdl{}S\PYZus{}}\PY{l+s+si}{\PYZob{}11\PYZcb{}}\PY{l+s+s2}{(f,}\PY{l+s+si}{\PYZpc{}.3f}\PY{l+s+s2}{)=}\PY{l+s+si}{\PYZpc{}.3f}\PY{l+s+s2}{\PYZdl{};}\PY{l+s+s2}{\PYZdq{}}
+                      \PY{o}{\PYZpc{}}\PY{p}{(}\PY{n}{x}\PY{p}{,} \PY{n}{spline11}\PY{p}{(}\PY{n}{x}\PY{p}{,} \PY{n}{x\PYZus{}nodes}\PY{p}{,} \PY{n}{f\PYZus{}nodes}\PY{p}{)}\PY{p}{)}\PY{p}{)}\PY{p}{)}
     \PY{n}{display}\PY{p}{(}\PY{n}{Markdown}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZlt{}br\PYZgt{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{p}{)}
 \end{Verbatim}
 \end{tcolorbox}
@@ -767,26 +769,38 @@
 
     
     \hypertarget{ux441ux43fux43bux430ux439ux43d-s_32fx}{%
-\subsection*{\texorpdfstring{4.Сплайн
+\subsection{\texorpdfstring{4.Сплайн
 \(S_{32}(f,x)\)}{4.Сплайн S\_\{32\}(f,x)}}\label{ux441ux43fux43bux430ux439ux43d-s_32fx}}
 
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
-\prompt{In}{incolor}{42}{\boxspacing}
+\prompt{In}{incolor}{20}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
-\PY{k}{def} \PY{n+nf}{df}\PY{p}{(}\PY{n}{x}\PY{p}{)}\PY{p}{:}
-    \PY{k}{return} \PY{o}{\PYZhy{}}\PY{l+m+mi}{2} \PY{o}{*} \PY{n}{x} \PY{o}{/} \PY{n+nb}{pow}\PY{p}{(}\PY{l+m+mi}{1} \PY{o}{+} \PY{n}{x} \PY{o}{*}\PY{o}{*} \PY{l+m+mi}{2}\PY{p}{,} \PY{l+m+mi}{2}\PY{p}{)}
+\PY{k}{def} \PY{n+nf}{df}\PY{p}{(}\PY{n}{x}\PY{p}{)}\PY{p}{:} \PY{k}{return} \PY{o}{\PYZhy{}}\PY{l+m+mi}{2} \PY{o}{*} \PY{n}{x} \PY{o}{/} \PY{n+nb}{pow}\PY{p}{(}\PY{l+m+mi}{1} \PY{o}{+} \PY{n}{x} \PY{o}{*}\PY{o}{*} \PY{l+m+mi}{2}\PY{p}{,} \PY{l+m+mi}{2}\PY{p}{)}
+
+
+\PY{k}{def} \PY{n+nf}{phi1}\PY{p}{(}\PY{n}{t}\PY{p}{)}\PY{p}{:} \PY{k}{return} \PY{p}{(}\PY{p}{(}\PY{l+m+mi}{1} \PY{o}{\PYZhy{}} \PY{n}{t}\PY{p}{)} \PY{o}{*}\PY{o}{*} \PY{l+m+mi}{2}\PY{p}{)} \PY{o}{*} \PY{p}{(}\PY{l+m+mi}{1} \PY{o}{+} \PY{l+m+mi}{2} \PY{o}{*} \PY{n}{t}\PY{p}{)}
+
+
+\PY{k}{def} \PY{n+nf}{phi2}\PY{p}{(}\PY{n}{t}\PY{p}{)}\PY{p}{:} \PY{k}{return} \PY{p}{(}\PY{n}{t} \PY{o}{*}\PY{o}{*} \PY{l+m+mi}{2}\PY{p}{)} \PY{o}{*} \PY{p}{(}\PY{l+m+mi}{3} \PY{o}{\PYZhy{}} \PY{l+m+mi}{2} \PY{o}{*} \PY{n}{t}\PY{p}{)}
+
+
+\PY{k}{def} \PY{n+nf}{phi3}\PY{p}{(}\PY{n}{t}\PY{p}{)}\PY{p}{:} \PY{k}{return} \PY{n}{t} \PY{o}{*} \PY{p}{(}\PY{l+m+mi}{1} \PY{o}{\PYZhy{}} \PY{n}{t}\PY{p}{)} \PY{o}{*}\PY{o}{*} \PY{l+m+mi}{2}
+
+
+\PY{k}{def} \PY{n+nf}{phi4}\PY{p}{(}\PY{n}{t}\PY{p}{)}\PY{p}{:} \PY{k}{return} \PY{p}{(}\PY{n}{t} \PY{o}{*}\PY{o}{*} \PY{l+m+mi}{2}\PY{p}{)} \PY{o}{*} \PY{p}{(}\PY{n}{t} \PY{o}{\PYZhy{}} \PY{l+m+mi}{1}\PY{p}{)}
+
 
 \PY{k}{def} \PY{n+nf}{spline32}\PY{p}{(}\PY{n}{x}\PY{p}{:} \PY{n+nb}{float}\PY{p}{,} \PY{n}{nodes\PYZus{}x}\PY{p}{:} \PY{n+nb}{list}\PY{p}{,} \PY{n}{nodes\PYZus{}f}\PY{p}{:} \PY{n+nb}{list}\PY{p}{)}\PY{p}{:}
     \PY{n}{l} \PY{o}{=} \PY{l+m+mi}{0}
     \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n+nb}{len}\PY{p}{(}\PY{n}{nodes\PYZus{}x}\PY{p}{)} \PY{o}{\PYZhy{}} \PY{l+m+mi}{1}\PY{p}{)}\PY{p}{:}
-        \PY{k}{if} \PY{n}{nodes\PYZus{}x}\PY{p}{[}\PY{n}{i}\PY{p}{]} \PY{o}{\PYZlt{}}\PY{o}{=} \PY{n}{x} \PY{o}{\PYZlt{}}\PY{o}{=} \PY{n}{nodes\PYZus{}x}\PY{p}{[}\PY{n}{i} \PY{o}{+} \PY{l+m+mi}{1}\PY{p}{]}\PY{p}{:}
+        \PY{k}{if} \PY{n}{nodes\PYZus{}x}\PY{p}{[}\PY{n}{i}\PY{p}{]} \PY{o}{\PYZlt{}} \PY{n}{x} \PY{o}{\PYZlt{}}\PY{o}{=} \PY{n}{nodes\PYZus{}x}\PY{p}{[}\PY{n}{i} \PY{o}{+} \PY{l+m+mi}{1}\PY{p}{]}\PY{p}{:}
             \PY{n}{l} \PY{o}{=} \PY{n}{i}
             \PY{k}{break}
     \PY{n}{h} \PY{o}{=} \PY{n}{nodes\PYZus{}x}\PY{p}{[}\PY{n}{l} \PY{o}{+} \PY{l+m+mi}{1}\PY{p}{]} \PY{o}{\PYZhy{}} \PY{n}{nodes\PYZus{}x}\PY{p}{[}\PY{n}{l}\PY{p}{]}
     \PY{n}{t} \PY{o}{=} \PY{p}{(}\PY{n}{x} \PY{o}{\PYZhy{}} \PY{n}{nodes\PYZus{}x}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{)} \PY{o}{/} \PY{n}{h}
-    \PY{n}{A} \PY{o}{=} \PY{o}{\PYZhy{}}\PY{l+m+mi}{2} \PY{o}{*} \PY{p}{(}\PY{n}{nodes\PYZus{}f}\PY{p}{[}\PY{n}{l} \PY{o}{+} \PY{l+m+mi}{1}\PY{p}{]} \PY{o}{\PYZhy{}} \PY{n}{nodes\PYZus{}f}\PY{p}{[}\PY{n}{l}\PY{p}{]}\PY{p}{)} \PY{o}{/} \PY{n}{h} \PY{o}{+} \PY{p}{(}\PY{n}{df}\PY{p}{(}\PY{n}{nodes\PYZus{}x}\PY{p}{[}\PY{n}{l}\PY{p}{]}\PY{p}{)} \PY{o}{+} \PY{n}{df}\PY{p}{(}\PY{n}{nodes\PYZus{}x}\PY{p}{[}\PY{n}{l} \PY{o}{+} \PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}\PY{p}{)}
-    \PY{n}{B} \PY{o}{=} \PY{o}{\PYZhy{}}\PY{n}{A} \PY{o}{+} \PY{p}{(}\PY{n}{nodes\PYZus{}f}\PY{p}{[}\PY{n}{l} \PY{o}{+} \PY{l+m+mi}{1}\PY{p}{]} \PY{o}{\PYZhy{}} \PY{n}{nodes\PYZus{}f}\PY{p}{[}\PY{n}{l}\PY{p}{]}\PY{p}{)} \PY{o}{/} \PY{n}{h} \PY{o}{\PYZhy{}} \PY{n}{df}\PY{p}{(}\PY{n}{nodes\PYZus{}x}\PY{p}{[}\PY{n}{l}\PY{p}{]}\PY{p}{)}
-    \PY{k}{return} \PY{n}{nodes\PYZus{}f}\PY{p}{[}\PY{n}{l}\PY{p}{]} \PY{o}{+} \PY{p}{(}\PY{n}{x} \PY{o}{\PYZhy{}} \PY{n}{nodes\PYZus{}x}\PY{p}{[}\PY{n}{l}\PY{p}{]}\PY{p}{)} \PY{o}{*} \PY{p}{(}\PY{n}{df}\PY{p}{(}\PY{n}{nodes\PYZus{}x}\PY{p}{[}\PY{n}{l}\PY{p}{]} \PY{o}{+} \PY{n}{t} \PY{o}{*} \PY{p}{(}\PY{n}{B} \PY{o}{+} \PY{n}{t} \PY{o}{*} \PY{n}{A}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+    \PY{k}{return} \PY{n}{phi1}\PY{p}{(}\PY{n}{t}\PY{p}{)} \PY{o}{*} \PY{n}{nodes\PYZus{}f}\PY{p}{[}\PY{n}{l}\PY{p}{]} \PY{o}{+} \PY{n}{phi2}\PY{p}{(}\PY{n}{t}\PY{p}{)} \PY{o}{*} \PY{n}{nodes\PYZus{}f}\PY{p}{[}\PY{n}{l} \PY{o}{+} \PY{l+m+mi}{1}\PY{p}{]} \PYZbs{}
+           \PY{o}{+} \PY{n}{phi3}\PY{p}{(}\PY{n}{t}\PY{p}{)} \PY{o}{*} \PY{n}{h} \PY{o}{*} \PY{n}{df}\PY{p}{(}\PY{n}{nodes\PYZus{}x}\PY{p}{[}\PY{n}{l}\PY{p}{]}\PY{p}{)} \PY{o}{+} \PY{n}{phi4}\PY{p}{(}\PY{n}{t}\PY{p}{)} \PYZbs{}
+           \PY{o}{*} \PY{n}{h} \PY{o}{*} \PY{n}{df}\PY{p}{(}\PY{n}{nodes\PYZus{}x}\PY{p}{[}\PY{n}{l} \PY{o}{+} \PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}
 
 
 \PY{n}{N} \PY{o}{=} \PY{p}{(}\PY{l+m+mi}{4}\PY{p}{,} \PY{l+m+mi}{10}\PY{p}{,} \PY{l+m+mi}{20}\PY{p}{,} \PY{l+m+mi}{40}\PY{p}{)}
@@ -797,90 +811,91 @@
     \PY{n}{answers} \PY{o}{=} \PY{p}{[}\PY{p}{]}
     \PY{n}{display}\PY{p}{(}\PY{n}{Latex}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Случай, когда \PYZdl{}n=}\PY{l+s+si}{\PYZpc{}i}\PY{l+s+s2}{\PYZdl{}:}\PY{l+s+s2}{\PYZdq{}}\PY{o}{\PYZpc{}}\PY{k}{n}), Markdown(\PYZdq{}\PYZlt{}br\PYZgt{}\PYZdq{}))
     \PY{k}{for} \PY{n}{x} \PY{o+ow}{in} \PY{n}{X}\PY{p}{:}
-        \PY{n}{display}\PY{p}{(}\PY{n}{Latex}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZdl{}S\PYZus{}}\PY{l+s+si}{\PYZob{}32\PYZcb{}}\PY{l+s+s2}{(f,}\PY{l+s+si}{\PYZpc{}.3f}\PY{l+s+s2}{)=}\PY{l+s+si}{\PYZpc{}.3f}\PY{l+s+s2}{\PYZdl{};}\PY{l+s+s2}{\PYZdq{}}\PY{o}{\PYZpc{}}\PY{p}{(}\PY{n}{x}\PY{p}{,} \PY{n}{spline32}\PY{p}{(}\PY{n}{x}\PY{p}{,} \PY{n}{x\PYZus{}nodes}\PY{p}{,} \PY{n}{f\PYZus{}nodes}\PY{p}{)}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+        \PY{n}{display}\PY{p}{(}\PY{n}{Latex}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZdl{}S\PYZus{}}\PY{l+s+si}{\PYZob{}32\PYZcb{}}\PY{l+s+s2}{(f,}\PY{l+s+si}{\PYZpc{}.3f}\PY{l+s+s2}{)=}\PY{l+s+si}{\PYZpc{}.4f}\PY{l+s+s2}{\PYZdl{};}\PY{l+s+s2}{\PYZdq{}}
+                      \PY{o}{\PYZpc{}}\PY{p}{(}\PY{n}{x}\PY{p}{,} \PY{n}{spline32}\PY{p}{(}\PY{n}{x}\PY{p}{,} \PY{n}{x\PYZus{}nodes}\PY{p}{,} \PY{n}{f\PYZus{}nodes}\PY{p}{)}\PY{p}{)}\PY{p}{)}\PY{p}{)}
     \PY{n}{display}\PY{p}{(}\PY{n}{Markdown}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZlt{}br\PYZgt{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{p}{)}
 \end{Verbatim}
 \end{tcolorbox}
 
-    Случай, когда $n=4$:
+    Случай, когда $n=4$:\\
 
     
     
 
     
-    $S_{32}(f,-0.750)=0.633$;
+    $S_{32}(f,-0.750)=0.6412$;
 
     
-    $S_{32}(f,-0.250)=0.962$;
+    $S_{32}(f,-0.250)=0.9400$;
 
     
-    $S_{32}(f,0.250)=1.107$;
+    $S_{32}(f,0.250)=0.9400$;
 
     
-    $S_{32}(f,0.750)=0.640$;
-
-    
-    
-
-    
-    Случай, когда $n=10$:
+    $S_{32}(f,0.750)=0.6412$;\\
 
     
     
 
     
-    $S_{32}(f,-0.900)=0.551$;
-
-    
-    $S_{32}(f,-0.100)=1.011$;
-
-    
-    $S_{32}(f,0.100)=1.019$;
-
-    
-    $S_{32}(f,0.900)=0.551$;
+    Случай, когда $n=10$:\\
 
     
     
 
     
-    Случай, когда $n=20$:
+    $S_{32}(f,-0.900)=0.5526$;
+
+    
+    $S_{32}(f,-0.100)=0.9902$;
+
+    
+    $S_{32}(f,0.100)=0.9902$;
+
+    
+    $S_{32}(f,0.900)=0.5526$;\\
 
     
     
 
     
-    $S_{32}(f,-0.950)=0.525$;
-
-    
-    $S_{32}(f,-0.050)=1.004$;
-
-    
-    $S_{32}(f,0.050)=1.005$;
-
-    
-    $S_{32}(f,0.950)=0.525$;
+    Случай, когда $n=20$:\\
 
     
     
 
     
-    Случай, когда $n=40$:
+    $S_{32}(f,-0.950)=0.5254$;
+
+    
+    $S_{32}(f,-0.050)=0.9975$;
+
+    
+    $S_{32}(f,0.050)=0.9975$;
+
+    
+    $S_{32}(f,0.950)=0.5254$;\\
 
     
     
 
     
-    $S_{32}(f,-0.975)=0.513$;
+    Случай, когда $n=40$:\\
 
     
-    $S_{32}(f,-0.025)=1.002$;
+    
 
     
-    $S_{32}(f,0.025)=1.001$;
+    $S_{32}(f,-0.975)=0.5128$;
 
     
-    $S_{32}(f,0.975)=0.513$;
+    $S_{32}(f,-0.025)=0.9996$;
+
+    
+    $S_{32}(f,0.025)=0.9996$;
+
+    
+    $S_{32}(f,0.975)=0.5128$;\\
 
     
     
